@@ -1,14 +1,48 @@
 <template>
 	<div class="twin">
-		<li>
-			EdgeID:
-			<input type="text" v-model="bind_edge_id" />{{bind_edge_id}}
-			<button type="button" v-on:click="bind_edge" >Bind Edge</button>
-			<br />
-			<textarea rows="3" cols="55" readonly="readonly" v-model="bind_result">
-				RETURN:
-			</textarea>
-		</li>
+		<el-form :inline="true" :model="formInline" class="bind-form-inline">
+			<el-form-item label="EdgeID">
+				<el-input v-model="formInline.bind_edge_id" 
+						placeholder="EdgeID" 
+						prefix-icon="el-icon-search" 
+						auto-complete="off" />{{formInline.bind_edge_id}}
+			</el-form-item>
+			<el-form-item>
+				<el-button type="primary" @click="bind_edge">Edge Bind</el-button>
+			</el-form-item>
+
+			<el-input type="textarea" 
+				:rows="2" 
+				placeholder="RETURN:" 
+				v-model="bind_result">
+			</el-input>
+		</el-form>
+		<el-form :inline="true" :model="formInline" class="create-form-inline">
+			<el-form-item label="EdgeID">
+				<el-input v-model="formInline.create_edge_id" 
+						placeholder="EdgeID" 
+						prefix-icon="el-icon-search" 
+						auto-complete="off" />{{formInline.create_edge_id}}
+			</el-form-item>
+			<el-form-item label="TwinID">
+				<el-input v-model="formInline.create_twin_id" 
+						placeholder="TwinID" 
+						prefix-icon="el-icon-search" 
+						auto-complete="off" />{{formInline.create_twin_id}}
+			</el-form-item>
+			<el-form-item>
+				<el-button type="primary" @click="bind_edge">Edge Bind</el-button>
+			</el-form-item>
+
+			<el-input type="textarea" 
+				:rows="2" 
+				placeholder="RETURN:" 
+				v-model="bind_result">
+			</el-input>
+		</el-form>
+	
+	
+
 		<li>
 			EdgeID: 
 			<input type="text" v-model="create_edge_id"    />{{create_edge_id}}
@@ -54,9 +88,8 @@ export default {
 	data() {
 		return {
 			server_URL: "http://127.0.0.1/",
-			bind_edge_id:'',
-			create_edge_id: '',
-			create_twin_id: '',
+			
+			
 			get_twin_id: '',
 			get_edge_id: '',
 			del_edge_id: '',
@@ -65,6 +98,11 @@ export default {
 			create_result: '',
 			get_result:'',
 			del_result:'',
+			formInline: {
+				bind_edge_id:'',
+				create_edge_id: '',
+				create_twin_id: '',
+			},
 		};
 	},
 	mounted() {

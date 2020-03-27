@@ -18,6 +18,7 @@
 			</el-form-item>
 		</el-form>
 		<div class="device-twin">
+			<router-view></router-view>
 		</div>
 	</div>	
 </template>
