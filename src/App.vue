@@ -17,23 +17,23 @@
 				@open="handleOpen"
 				@close="handleClose"
 				>
-						<el-menu-item index="/twin" @click="goTo('/twin')">
-							<i class="el-icon-menu"></i>
-							<span slot="title">设备管理</span>
-						</el-menu-item>
-						<el-menu-item index="/device" @click="goTo('/device')">
-							<i class="el-icon-setting"></i>
-							<span slot="title">设备控制</span>
-						</el-menu-item>
-						<el-menu-item index="/device" @click="goTo('/device')">
-							<i class="el-icon-setting"></i>
-							<span slot="title">集群管理</span>
-						</el-menu-item>
-						<el-menu-item index="/device" @click="goTo('/device')">
-							<i class="el-icon-setting"></i>
-							<span slot="title">其他</span>
-						</el-menu-item>
-					</el-menu>	
+					<el-menu-item index="/twin" @click="goTo('/twin')">
+						<i class="el-icon-menu"></i>
+						<span slot="title">设备管理</span>
+					</el-menu-item>
+					<el-menu-item index="/device" @click="goTo('/device')">
+						<i class="el-icon-setting"></i>
+						<span slot="title">设备控制</span>
+					</el-menu-item>
+					<el-menu-item index="/edge" @click="goTo('/edge')">
+						<i class="el-icon-setting"></i>
+						<span slot="title">集群管理</span>
+					</el-menu-item>
+					<el-menu-item index="/other" @click="goTo('/other')">
+						<i class="el-icon-setting"></i>
+						<span slot="title">其他</span>
+					</el-menu-item>
+				</el-menu>	
 			</el-aside>
 			<el-main>
 				<div class="contentMain" >
@@ -74,6 +74,7 @@ export default {
     width:100%;
     padding:0;
     margin:0;
+	position: absolute;
 }
 
 .el-aside {

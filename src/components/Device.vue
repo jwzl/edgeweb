@@ -18,6 +18,7 @@
 			</el-form-item>
 		</el-form>
 		<div class="device-twin">
+			<el-divider></el-divider>
 			<router-view></router-view>
 		</div>
 	</div>	
@@ -36,20 +37,28 @@ export default {
   },
   methods: {
 		onSubmit() {
-
+			var request_url = this.server_URL+"edge/"+this.formInline.edge_id+"/twin/"+this.formInline.twin_id
+			this.result_text = request_url
+			
+			this.$http.get(request_url)
+			.then((response) => {
+				this.result_text = response.text()+" Success:" + response.statusText
+			},
+			(response) => {
+				this.result_text = response.text()+" failed:"+ response.statusText
+				console.log(response)	
+			})	
 		},
-  }
+
+		goTo(path) {
+			this.$router.replace(path);
+		},
+  },
 };
 </script>
 
 <style scoped>
 .device {
   margin-top: 5px;
-}
-
-.device-twin {
-	border-style: solid;
-	border-color:#00;
-	border-width:thin;
 }
 </style>
