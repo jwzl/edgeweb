@@ -19,7 +19,38 @@
 		</el-form>
 		<div class="device-twin">
 			<el-divider></el-divider>
-			<router-view></router-view>
+			<el-card class="box-card">
+				<div slot="header" class="clearfix">
+					<span>Device</span>
+				</div>
+				<div class="twininfo">
+					<el-form ref="devicetwin" :model="devicetwin" label-width="80px">
+						<el-form-item label="ID">
+							<el-input v-model="devicetwin.id"
+								readonly 
+								auto-complete="off" />
+						</el-form-item>
+						<el-form-item label="Name">
+							<el-input v-model="devicetwin.name"
+								readonly 
+								auto-complete="off" />
+						</el-form-item>
+						<el-form-item label="Description">
+							<el-input v-model="devicetwin.description"
+								readonly 
+								auto-complete="off" />
+						</el-form-item>
+						<el-form-item label="State">
+							<el-input v-model="devicetwin.state"
+								readonly 
+								auto-complete="off" />
+						</el-form-item>
+					</el-form>
+				</div>
+				<div v-for="o in 4" :key="o" class="text item">
+					{{'列表内容 ' + o }}
+				</div>
+			</el-card>
 		</div>
 	</div>	
 </template>
@@ -29,10 +60,16 @@ export default {
   name: 'Device',
   data() {
     return {
+		devicetwin: {
+			id: '',	
+			name: '',
+			description: '',
+			state: '', 	
+		},
 		formInline: {
           edgeid: '',
-          twinid: ''
-        }
+          twinid: '',	
+        },
     };
   },
   methods: {
