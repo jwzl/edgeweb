@@ -45,10 +45,15 @@
 								readonly 
 								auto-complete="off" />
 						</el-form-item>
+						<span>Metadata:</span> 
+						<el-form-item :label="data.name"  v-for="data in devicetwin.metadata" :key="data.name">
+							<el-input v-model="data.value"
+							readonly 
+							auto-complete="off" />
+						</el-form-item>
+						<el-divider></el-divider>
+						<span>Properties:</span>
 					</el-form>
-				</div>
-				<div v-for="o in 4" :key="o" class="text item">
-					{{'列表内容 ' + o }}
 				</div>
 			</el-card>
 		</div>
@@ -65,6 +70,13 @@ export default {
 			name: '',
 			description: '',
 			state: '', 	
+			metadata: [
+				{name: 'pattr', value: '123'},
+				{name: 'ayro', value: '233'}
+			],
+			Properties: [
+
+			],
 		},
 		formInline: {
           edgeid: '',
