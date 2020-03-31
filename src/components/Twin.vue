@@ -45,7 +45,7 @@ export default {
 	name: 'Twin',
 	data() {
 		return {
-			server_URL: "http://127.0.0.1/",
+			server_URL: "http://127.0.0.1:8080/",
 			result_text:'',
 			formInline: {
 				edge_id: '',
@@ -55,10 +55,10 @@ export default {
 	},
 	methods: {
 		bind_edge: function() {
-			var request_url = this.server_URL+"edge/"+this.formInline.edge_id+"/bind"
+			var request_url = this.server_URL+"edge/bind?edgeid="+this.formInline.edge_id
 			this.result_text = request_url
 
-			this.$http.post(request_url)
+			this.$http.post(request_url, {})
 			.then((response) => {
 				this.result_text = response.text()+" Success:" + response.statusText
 			},
