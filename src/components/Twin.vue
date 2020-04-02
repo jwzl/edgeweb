@@ -45,7 +45,7 @@ export default {
 	name: 'Twin',
 	data() {
 		return {
-			server_URL: "http://127.0.0.1:8080/",
+			server_URL: "http://172.21.73.90:8080/rest/v1/",
 			result_text:'',
 			formInline: {
 				edge_id: '',
@@ -58,17 +58,18 @@ export default {
 			var request_url = this.server_URL+"edge/bind?edgeid="+this.formInline.edge_id
 			this.result_text = request_url
 
-			this.$http.post(request_url, {})
+			this.$http.post(request_url, {username:"gaogaogao",password:"123456"}, {emulateJSON: true})
 			.then((response) => {
 				this.result_text = response.text()+" Success:" + response.statusText
 			},
 			(response) => {
+				console.dir(response)
 				this.result_text = response.text()+" failed:"+ response.statusText
 			})
 			
 		},
 		bind_twin: function() {
-			var request_url = this.server_URL+"edge/"+this.formInline.edge_id+"/twin/"+this.formInline.twin_id
+			var request_url = this.server_URL+"dev/twin?edgeid="+this.formInline.edge_id+"&twinid="+this.formInline.twin_id
 			this.result_text = request_url
 
 			this.$http.post(request_url)
