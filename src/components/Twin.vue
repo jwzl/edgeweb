@@ -72,7 +72,7 @@ export default {
 			var request_url = this.server_URL+"dev/twin?edgeid="+this.formInline.edge_id+"&twinid="+this.formInline.twin_id
 			this.result_text = request_url
 
-			this.$http.post(request_url)
+			this.$http.put(request_url)
 			.then((response) => {
 				this.result_text = response.text()+" Success:" + response.statusText
 			},
