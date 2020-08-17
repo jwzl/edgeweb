@@ -31,11 +31,14 @@
 		<div class="result">
 			<el-divider></el-divider>
 			<el-input type="textarea" 
-				:rows="5" 
+				:rows="2" 
 				readonly
 				placeholder="RETURN:" 
 				v-model="result_text">
 			</el-input>
+			<scroll-view scroll-y style="height: 400rpx;">   
+				<json-viewer :value="json_data"></json-viewer>
+			</scroll-view>
 		</div>
 	</div>
 </template>
@@ -45,8 +48,9 @@ export default {
 	name: 'Twin',
 	data() {
 		return {
-			server_URL: "http://172.21.73.90:8080/rest/v1/",
+			server_URL: "http://192.168.0.102:8080/rest/v1/",
 			result_text:'',
+			json_data: {},
 			formInline: {
 				edge_id: '',
 				twin_id: '',
@@ -81,12 +85,14 @@ export default {
 			})
 		},
 		get_twin: function() {
-			var request_url = this.server_URL+"edge/"+this.formInline.edge_id+"/twin/"+this.formInline.twin_id
+			var request_url = this.server_URL+"dev/twin?edgeid="+this.formInline.edge_id+"&twinid="+this.formInline.twin_id
 			this.result_text = request_url
-			//var request_url = "http://www.baidu.com"
+			//request_url = "http://www.baidu.com"
 			this.$http.get(request_url)
 			.then((response) => {
-				this.result_text = response.text()+" Success:" + response.statusText
+				console.log(response.data)
+				this.result_text = "Success:" + response.statusText
+				this.json_data  = response.data 
 			},
 			(response) => {
 				this.result_text = response.text()+" failed:"+ response.statusText

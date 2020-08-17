@@ -116,9 +116,6 @@ export default {
     height:100%;
     width:100%;
 }
-.el-main{
-    overflow:hidden;
-}
 
 /deep/ .el-menu{
     height:100%;
