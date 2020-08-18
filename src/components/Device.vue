@@ -40,7 +40,7 @@
 		<el-table-column  align="right">
 			<template slot="header">
 				<el-button size="mini" type="primary"
-					@click="handleNew()">New</el-button>
+					@click="dialogFormVisible = true">New</el-button>
 			</template>
 			<template slot-scope="scope">
 				<el-button
@@ -48,7 +48,23 @@
 					type="danger"
 					@click="handleDelete(scope.$index, scope.row)">Delete</el-button>
 			</template>
-		</el-table-column>	
+		</el-table-column>
+		<el-dialog title="添加设备" :visible.sync="dialogFormVisible"
+			:append-to-body="true">
+			<el-form :model="form">
+				<el-form-item label="EdgeID" :label-width="formLabelWidth">
+					<el-input v-model="form.edgeid" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="TwinID" :label-width="formLabelWidth">
+					<el-input v-model="form.twinid" auto-complete="off"></el-input>
+				</el-form-item>
+			</el-form>
+
+			<div slot="footer" class="dialog-footer">
+				<el-button @click="dialogFormVisible = false">取 消</el-button>
+				<el-button type="primary" @click="handleNew()">确 定</el-button>
+			</div>
+		</el-dialog>
 	</el-table>
 </template>
 
@@ -57,13 +73,20 @@ export default {
   name: 'Device',
   data() {
     return {
-	tableData: [{
-		edgeid: '2016-05-03',
-		deviceid: 'Tom',
-		name: 'Tom',
-		description: 'Tom',
-		status: 1,
-	}],
+		server_URL: "http://172.21.73.101:8080/rest/v1/",
+		formLabelWidth: '120px',
+		dialogFormVisible: false,
+		tableData: [{
+			edgeid: '2016-05-03',
+			deviceid: 'Tom',
+			name: 'Tom',
+			description: 'Tom',
+			status: 1,
+		}],
+		form: {
+			edgeid: '',
+			twinid: '',	
+		},
 		devicetwin: {
 			id: '',	
 			name: '',
@@ -84,27 +107,105 @@ export default {
     };
   },
   methods: {
-		onSubmit() {
-			var request_url = this.server_URL+"edge/"+this.formInline.edge_id+"/twin/"+this.formInline.twin_id
-			this.result_text = request_url
-			
-			this.$http.get(request_url)
+		bind_edge(that, edgeid, callback) {
+			var request_url = that.server_URL+"edge/bind?edgeid="+edgeid
+
+			that.$http.post(request_url, {username:"gaogaogao",password:"123456"}, {emulateJSON: true})
 			.then((response) => {
-				this.result_text = response.text()+" Success:" + response.statusText
+				console.log(response)
+				callback(true)
 			},
 			(response) => {
-				this.result_text = response.text()+" failed:"+ response.statusText
-				console.log(response)	
+				console.log(response)
+				callback(false)
+			})
+			
+		},
+		bind_twin(that, edgeid, twinid, callback) {
+			var request_url = that.server_URL+"dev/twin?edgeid="+edgeid+"&twinid="+twinid
+
+			that.$http.put(request_url)
+			.then((response) => {
+				console.log(response)
+				callback(true)
+				return 
+			},
+			(response) => {
+				console.log(response)
+				callback(false)
+				return false
+			})
+		},
+		get_twin(that, edgeid, twinid, callback) {
+			var request_url = that.server_URL+"dev/twin?edgeid="+edgeid+"&twinid="+twinid
+			
+			that.$http.get(request_url)
+			.then((response) => {
+				console.log(response.data)
+				callback(response.data)
+				return  
+			},
+			(response) => {
+				console.log(response)
+				callback('')	
+				return 	
 			})	
 		},
-
 		goTo(path) {
 			this.$router.replace(path);
 		},
+		// New a device.
 		handleNew() {
-                        //console.log(index, row);
+			var res 
+			
+			// bind the edge.
+			this.$options.methods.bind_edge(this, this.form.edgeid, 
+				(data) =>{
+					console.log(data)
+					res = data
+					if(res != true){
+						console.log("bind failed");
+						this.dialogFormVisible = false
+						return 
+					}
 
-                },
+					//2. bind the device.
+					this.$options.methods.bind_twin(this, this.form.edgeid, 
+						this.form.twinid, (data) =>{
+							res = data
+							if(res != true){
+								console.log("bind failed");
+								this.dialogFormVisible = false
+								return 
+							}
+
+							//3. get the device.
+							setTimeout(() =>{
+								this.$options.methods.get_twin(this, this.form.edgeid, 
+									this.form.twinid, (data) =>{
+										console.log(data)
+										//4. Insert the table.
+										var state
+										if(data.state.trim() == 'online'){
+											state = 1
+										}else{
+											state = 0 	
+										}						
+										this.tableData.push({
+											edgeid: this.form.edgeid,
+											deviceid: this.form.twinid,
+											name: data.name,
+											description: data.description,
+											status:	state,
+										})
+										console.log(this.tableData);
+									})
+							}, 2000)									
+						})
+					//console.log(index, row);
+					this.dialogFormVisible = false
+				})
+		},
 		handleView(index, row) {
 			console.log(index, row);
 

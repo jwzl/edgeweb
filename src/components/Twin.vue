@@ -48,7 +48,7 @@ export default {
 	name: 'Twin',
 	data() {
 		return {
-			server_URL: "http://192.168.0.102:8080/rest/v1/",
+			server_URL: "http://172.21.73.101:8080/rest/v1/",
 			result_text:'',
 			json_data: {},
 			formInline: {
